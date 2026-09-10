@@ -62,7 +62,23 @@
         
          function percentage() {
     let display = document.getElementById("display");
-    display.value = eval(display.value) / 100;
+    let value = display.value;
+
+    let match = value.match(/^(\d+(?:\.\d+)?)([+\-*/])(\d+(?:\.\d+)?)$/);
+
+    if (match) {
+        let first = parseFloat(match[1]);
+        let operator = match[2];
+        let second = parseFloat(match[3]);
+
+        if (operator === "+" || operator === "-") {
+            second = first * second / 100;
+        } else {
+            second = second / 100;
+        }
+
+        display.value = first + operator + second;
+    }
         }
         function calculate() {
             let display = document.getElementById("display");
