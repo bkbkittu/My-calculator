@@ -59,10 +59,11 @@
             let display = document.getElementById("display");
             display.value = display.value.slice(0, -1);
         }
-function percentage() {
+        
+         function percentage() {
     let display = document.getElementById("display");
-    display.value = display.value / 100;
-}
+    display.value = eval(display.value) / 100;
+        }
         function calculate() {
             let display = document.getElementById("display");
 
