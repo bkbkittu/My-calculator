@@ -1,10 +1,17 @@
 {
   "name": "My Calculator",
   "short_name": "Calculator",
-  "start_url": "./",
+  "start_url": "/My-calculator/",
+  "scope": "/My-calculator/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "description": "My simple calculator app",
-  "icons": []
+  "icons": [
+    {
+      "src": "file_000000005a3881f5bd94ef547ab431f9.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
 }
