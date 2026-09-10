@@ -9,8 +9,8 @@
   "description": "My simple calculator app",
   "icons": [
     {
-      "src": "file_000000005a3881f5bd94ef547ab431f9.png",
-      "sizes": "192x192",
+      "src": "512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
