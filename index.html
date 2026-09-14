@@ -1,99 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Calculator</title>
+  <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <title>My Calculator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #fff8f7;
+    }
+
+    .calculator {
+      width: 100%;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 10px max(18px, env(safe-area-inset-bottom));
+    }
+
+    /* Top bar */
+    .top {
+      height: 55px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 25px;
+    }
+
+    .top button {
+      border: none;
+      background: transparent;
+      font-size: 30px;
+      color: #5d5050;
+      padding: 8px;
+    }
+
+    /* Display */
+    .display-area {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 20px 25px 35px;
+    }
+
+    #display {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      text-align: right;
+      font-size: clamp(42px, 10vw, 75px);
+      color: #302727;
+      font-weight: 400;
+    }
+
+    /* Small expand arrows */
+    .arrows {
+      position: absolute;
+      left: 30px;
+      bottom: 28px;
+      font-size: 25px;
+      color: #5d5050;
+      line-height: 16px;
+    }
+
+    /* Buttons */
+    .buttons {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 0 0;
+    }
+
+    button.calc-btn {
+      border: none;
+      border-radius: 50%;
+      aspect-ratio: 1 / 1;
+      font-size: clamp(25px, 7vw, 42px);
+      background: #f4e9e9;
+      color: #171313;
+      touch-action: manipulation;
+    }
+
+    button.calc-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* Pink function/operator buttons */
+    .function,
+    .operator {
+      background: #ffd8d8 !important;
+      color: #514545 !important;
+    }
+
+    .clear {
+      color: #b0003a !important;
+    }
+
+    /* Equal button */
+    .equals {
+      background: #805b22 !important;
+      color: white !important;
+    }
+
+    /* Bottom safe area */
+    .gesture {
+      height: 10px;
+      width: 100px;
+      background: #5c5555;
+      border-radius: 20px;
+      margin: 12px auto 0;
+    }
+
+    @media (max-height: 650px) {
+      .calculator {
+        padding-top: 8px;
+      }
+
+      .top {
+        height: 42px;
+      }
+
+      .display-area {
+        padding-bottom: 15px;
+      }
+
+      .buttons {
+        gap: 6px;
+      }
+    }
+  </style>
 </head>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('pwabuilder-sw.js');
-}
-</script>
+
 <body>
 
-    <h1>My Calculator</h1>
+<div class="calculator">
 
+  <div class="top">
+    <button onclick="showHistory()">↶</button>
+    <button onclick="showMenu()">⋮</button>
+  </div>
+
+  <div class="display-area">
     <input type="text" id="display" readonly>
+    <div class="arrows">⌃<br>⌄</div>
+  </div>
 
-    <br><br>
+  <div class="buttons">
 
-    <button onclick="clearDisplay()">C</button>
-    <button onclick="deleteLast()">⌫</button>
-    <button onclick="percentage()">%</button>
-    <button onclick="appendValue('/')">÷</button>
+    <!-- Row 1 -->
+    <button class="calc-btn function clear" onclick="clearDisplay()">AC</button>
+    <button class="calc-btn function" onclick="appendValue('(')">( )</button>
+    <button class="calc-btn function" onclick="percentage()">%</button>
+    <button class="calc-btn operator" onclick="appendValue('/')">÷</button>
 
-    <br><br>
+    <!-- Row 2 -->
+    <button class="calc-btn" onclick="appendValue('7')">7</button>
+    <button class="calc-btn" onclick="appendValue('8')">8</button>
+    <button class="calc-btn" onclick="appendValue('9')">9</button>
+    <button class="calc-btn operator" onclick="appendValue('*')">×</button>
 
-    <button onclick="appendValue('7')">7</button>
-    <button onclick="appendValue('8')">8</button>
-    <button onclick="appendValue('9')">9</button>
-    <button onclick="appendValue('*')">×</button>
+    <!-- Row 3 -->
+    <button class="calc-btn" onclick="appendValue('4')">4</button>
+    <button class="calc-btn" onclick="appendValue('5')">5</button>
+    <button class="calc-btn" onclick="appendValue('6')">6</button>
+    <button class="calc-btn operator" onclick="appendValue('-')">−</button>
 
-    <br><br>
+    <!-- Row 4 -->
+    <button class="calc-btn" onclick="appendValue('1')">1</button>
+    <button class="calc-btn" onclick="appendValue('2')">2</button>
+    <button class="calc-btn" onclick="appendValue('3')">3</button>
+    <button class="calc-btn operator" onclick="appendValue('+')">+</button>
 
-    <button onclick="appendValue('4')">4</button>
-    <button onclick="appendValue('5')">5</button>
-    <button onclick="appendValue('6')">6</button>
-    <button onclick="appendValue('-')">−</button>
+    <!-- Row 5 -->
+    <button class="calc-btn" onclick="appendValue('0')">0</button>
+    <button class="calc-btn" onclick="appendValue('.')">.</button>
+    <button class="calc-btn" onclick="deleteLast()">⌫</button>
+    <button class="calc-btn equals" onclick="calculate()">=</button>
 
-    <br><br>
+  </div>
 
-    <button onclick="appendValue('1')">1</button>
-    <button onclick="appendValue('2')">2</button>
-    <button onclick="appendValue('3')">3</button>
-    <button onclick="appendValue('+')">+</button>
+  <div class="gesture"></div>
 
-    <br><br>
+</div>
 
-    <button onclick="appendValue('0')">0</button>
-    <button onclick="appendValue('.')">.</button>
-    <button onclick="calculate()">=</button>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('pwabuilder-sw.js');
+  }
 
-    <script>
-        function appendValue(value) {
-            document.getElementById("display").value += value;
-        }
+  function appendValue(value) {
+    document.getElementById("display").value += value;
+  }
 
-        function clearDisplay() {
-            document.getElementById("display").value = "";
-        }
+  function clearDisplay() {
+    document.getElementById("display").value = "";
+  }
 
-        function deleteLast() {
-            let display = document.getElementById("display");
-            display.value = display.value.slice(0, -1);
-        }
-        function percentage() {
+  function deleteLast() {
+    let display = document.getElementById("display");
+    display.value = display.value.slice(0, -1);
+  }
+
+  function percentage() {
     let display = document.getElementById("display");
     let value = display.value;
 
     let match = value.match(/^(\d+(?:\.\d+)?)([+\-*/])(\d+(?:\.\d+)?)$/);
 
     if (match) {
-        let first = parseFloat(match[1]);
-        let operator = match[2];
-        let second = parseFloat(match[3]);
+      let first = parseFloat(match[1]);
+      let operator = match[2];
+      let second = parseFloat(match[3]);
 
-        if (operator === "+" || operator === "-") {
-            second = first * second / 100;
-        } else {
-            second = second / 100;
-        }
+      if (operator === "+" || operator === "-") {
+        second = first * second / 100;
+      } else {
+        second = second / 100;
+      }
 
-        display.value = first + operator + second;
-        }
-        }
-        function calculate() {
-            let display = document.getElementById("display");
+      display.value = first + operator + second;
+    }
+  }
 
-            try {
-                display.value = eval(display.value);
-            } catch {
-                display.value = "Error";
-            }
-        }
-    </script>
+  function calculate() {
+    let display = document.getElementById("display");
+
+    try {
+      display.value = eval(display.value);
+    } catch {
+      display.value = "Error";
+    }
+  }
+
+  function showHistory() {
+    alert("History");
+  }
+
+  function showMenu() {
+    alert("Calculator Menu");
+  }
+</script>
 
 </body>
 </html>
